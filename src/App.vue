@@ -1,30 +1,47 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div class="container">
+    <h1>Список покупок</h1>
+    <div v-if="shoppingList.length === 0">
+      <p>Список покупок пуст.</p>
+      <input v-model="newItem" placeholder="Введите покупку" />
+      <button @click="addItem" :disabled="newItem === ''">Добавить</button>
+    </div>
+    <ul v-else>
+      <li
+        v-for="(item, index) in shoppingList"
+        :key="index"
+        @click="removeItem(index)"
+      >
+        {{ item }}
+        <!-- <button @click="removeItem(index)">Удалить</button> -->
+      </li>
+      <input v-model="newItem" placeholder="Введите покупку" />
+      <button @click="addItem" :disabled="newItem === ''">Добавить</button>
+    </ul>
+  </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      shoppingList: ["Тв", "Приставка", "Саундбар"],
+      newItem: "",
+    };
+  },
+  methods: {
+    addItem() {
+      this.shoppingList.push(this.newItem);
+      this.newItem = "";
+    },
+    removeItem(index) {
+      this.shoppingList.splice(index, 1);
+    },
+  },
+};
+</script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+<style>
+.container {
+  margin-top: 2rem;
 }
 </style>
